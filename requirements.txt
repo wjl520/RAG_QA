@@ -1,0 +1,7 @@
+langchain==0.3.24
+langchain_community==0.3.22
+faiss-cpu==1.11.0
+openai==1.66.3
+tiktoken==0.8.0
+pypdf==5.7.0
+unstructured==0.18.3
