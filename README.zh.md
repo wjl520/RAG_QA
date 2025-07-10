@@ -13,8 +13,28 @@
 - 文本切分
 - 向量化与检索
 - 大模型生成回答。
-
+```
+用户问题 → 向量化 → FAISS 检索 Top-N → reranker 重排 → 拼接上下文 → LLM 回答
+```
 --- 
+#### 检索算法
+(1) 最近邻搜索
+- 向量库     索引结构
+- Faiss:    Flat, IVF, HNSW
+- Milvus:   IVF+HNSW, PQ
+- Weaviate: HNSW
+- Qdrant:   HNSW
+
+(2) 相似度计算
+- Cosine
+- Dot Product
+
+#### 排序算法 (可选)
+- BGE-Reranker
+- MiniLM
+- MonoT5
+
+---
 
 ### 如何使用
 1. 安装环境
@@ -31,7 +51,33 @@ OPENAI_API_KEY=""
 
 3. 运行demo
 ```
-python main.py
+from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
+from langchain.vectorstores import FAISS
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.chat_models import ChatOpenAI
+
+# 初始化组件
+llm = ChatOpenAI(model="gpt-4", temperature=0)
+embedding_model = OpenAIEmbeddings()
+vectorstore = FAISS.load_local("faiss_index", embeddings=embedding_model)
+retriever = vectorstore.as_retriever()
+
+# 对话历史记忆
+memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+
+# 构建 Conversational RAG Chain
+qa_chain = ConversationalRetrievalChain.from_llm(
+    llm=llm,
+    retriever=retriever,
+    memory=memory
+)
+
+# 多轮对话调用
+question = "IPO是什么？"
+result = qa_chain.run(question)
+print(result)
+
 ```
 
 ### 参考与致谢
