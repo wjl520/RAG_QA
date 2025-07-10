@@ -44,7 +44,7 @@ OPENAI_API_KEY=""
 ```
 
 3. run demo in main.py
-```
+```python
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain.vectorstores import FAISS

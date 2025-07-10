@@ -49,8 +49,8 @@ pip install -r requirements.txt
 OPENAI_API_KEY=""
 ```
 
-3. 运行demo
-```
+3. 样例代码
+```python
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain.vectorstores import FAISS
